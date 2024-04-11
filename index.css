@@ -1,14 +1,15 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
+    background-color: #fff8db;
 }
 
 #board {
     height: 540px;
     width: 630px;
 
-    background-color: blue;
-    border: 10px solid navy;
+    background-color: #a3a4e4;
+    border: 10px solid #7375e4;
 
     margin: 0 auto;
     display: flex;
@@ -20,15 +21,23 @@ body {
     width: 70px;
     margin: 5px;
 
-    background-color: white;
+    background-color: #fff8db;
     border-radius: 50%;
-    border: 5px solid navy;
+    border: 5px solid #7375e4;
+
 }
 
 .red-piece {
-    background-color: red;
+    background-color: #fe7b81;
 }
 
 .yellow-piece {
-    background-color: yellow;
+    background-color: #fff88d;
 }
+
+.resetButton {
+    font-size: 30px; /* Adjust font size */
+    background-color: #fff8db; /* Background color */
+    color: black; /* Text color */
+}
+

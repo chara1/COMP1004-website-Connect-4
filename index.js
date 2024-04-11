@@ -1,19 +1,23 @@
-var PlayerRed = "R";
-var PlayerYellow = "Y";
-var currPlayer = "PlayerRed";
+var playerRed = "R";
+var playerYellow = "Y";
+var currPlayer = playerRed;
 
 var gameOver = false;
 var board;
 
+
 var rows = 6;
 var columns = 7;
+var currColumns;
 
 window.onload = function(){
     setGame();
+    WebpageReloader();
 }
 
 function setGame() {
-    board =[];
+    board = [];
+    currColumns = [5,5,5,5,5,5,5];
 
     for (let r = 0; r < rows; r++) {
         let row =[];
@@ -33,7 +37,7 @@ function setGame() {
     }
 }
 
-function setPiece(){
+function setPiece() {
     if (gameOver) {
         return;
     }
@@ -42,14 +46,96 @@ function setPiece(){
     let r = parseInt(coords[0]);
     let c = parseInt(coords[1]);
 
+    r = currColumns[c];
+    if (r < 0) {
+        return;
+    }
+
     board[r][c] = currPlayer;
-    let tile = this;
-    if (currPlayer == PlayerRed) {
+    let tile = document.getElementById(r.toString() + "-" + c.toString());
+    if (currPlayer == playerRed) {
         tile.classList.add("red-piece");
-        currPlayer = PlayerYellow;
+        currPlayer = playerYellow;
     }
     else {
         tile.classList.add("yellow-piece");
-        currPlayer = PlayerRed;
+        currPlayer = playerRed;
+    }
+
+    r -= 1; // updating the row height for the column
+    currColumns[c] = r; //updating the array
+
+    checkWinner();
+}
+
+function checkWinner() {
+    // horizontally
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < columns - 3; c++) {
+            if (board[r][c] != ' ') {
+                if (board[r][c] == board[r][c+1] && board[r][c+1] == board[r][c+2] && board[r][c+2] == board[r][c+3]) {
+                    setWinner(r, c);
+                    return;
+                }
+            }
+        }        
+    }
+
+    // vertical
+    for (let c = 0; c < columns; c++) {
+        for (let r = 0; r < rows - 3; r++) {
+            if (board[r][c] != ' ') {
+                if (board[r][c] == board[r+1][c] && board[r+1][c] == board[r+2][c] && board[r+2][c] == board[r+3][c]) {
+                    setWinner(r, c);
+                    return;
+                }
+            }
+        }        
+    }
+
+    // anti diagonal
+    for (let r = 0; r < rows - 3; r++) {
+        for (let c = 0; c < columns - 3; c++) {
+            if (board[r][c] != ' ') {
+                if (board[r][c] == board[r+1][c+1] && board[r+1][c+1] == board[r+2][c+2] && board[r+2][c+2] == board[r+3][c+3]) {
+                    setWinner(r, c);
+                    return;
+                }
+            }
+        }        
+    }
+
+    // diagonal
+    for (let r = 3; r < rows; r++) {
+        for (let c = 0; c < columns - 3; c++) {
+            if (board[r][c] != ' ') {
+                if (board[r][c] == board[r-1][c+1] && board[r-1][c+1] == board[r-2][c+2] && board[r-2][c+2] == board[r-3][c+3]) {
+                    setWinner(r, c);
+                    return;
+                }
+            }
+        }        
     }
 }
+
+function setWinner(r, c) {
+    let winner = document.getElementById("winner");
+    if (board[r][c] == playerRed) {
+        winner.innerText = "Red Wins || Yellow Lost";
+    } else {
+        winner.innerText = "Yellow Wins || Red Lost";
+    }
+    gameOver = true;
+}
+
+
+function WebpageReloader() {
+    let resetButton = document.createElement("button");
+    resetButton.innerText = "Reset";
+    resetButton.classList.add("resetButton"); // Add the class "resetButton" to the button
+    resetButton.addEventListener("click", function() {
+        location.reload(); // Reload the page when the button is clicked
+    });
+    document.body.appendChild(resetButton); // Append the button to the body of the document
+}
+

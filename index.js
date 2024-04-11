@@ -15,6 +15,7 @@ window.onload = function(){
     WebpageReloader();
 }
 
+// Creates the main rows and columns of connect 4
 function setGame() {
     board = [];
     currColumns = [5,5,5,5,5,5,5];
@@ -37,6 +38,7 @@ function setGame() {
     }
 }
 
+// Makes game pieces show up on the board and applies gravity to them
 function setPiece() {
     if (gameOver) {
         return;
@@ -68,6 +70,7 @@ function setPiece() {
     checkWinner();
 }
 
+// Cheques for possible conditions so the game can end
 function checkWinner() {
     // horizontally
     for (let r = 0; r < rows; r++) {
@@ -118,6 +121,7 @@ function checkWinner() {
     }
 }
 
+// Display who has won to the user
 function setWinner(r, c) {
     let winner = document.getElementById("winner");
     if (board[r][c] == playerRed) {
@@ -128,14 +132,14 @@ function setWinner(r, c) {
     gameOver = true;
 }
 
-
+// Button for reloading the page
 function WebpageReloader() {
     let resetButton = document.createElement("button");
     resetButton.innerText = "Reset";
-    resetButton.classList.add("resetButton"); // Add the class "resetButton" to the button
+    resetButton.classList.add("resetButton"); 
     resetButton.addEventListener("click", function() {
-        location.reload(); // Reload the page when the button is clicked
+        location.reload(); // reload the page
     });
-    document.body.appendChild(resetButton); // Append the button to the body of the document
+    document.body.appendChild(resetButton); // Makes the button appear
 }
 

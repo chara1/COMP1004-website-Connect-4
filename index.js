@@ -1,11 +1,11 @@
-var playerRed = "R";
-var playerYellow = "Y";
-var currPlayer = playerRed;
+var playerOneRed = "R";
+var playerTwoYellow = "Y";
+var currPlayer = playerOneRed;
 
 var gameOver = false;
 var board;
 
-
+// Helps with the board
 var rows = 6;
 var columns = 7;
 var currColumns;
@@ -15,7 +15,7 @@ window.onload = function(){
     WebpageReloader();
 }
 
-// Creates the main rows and columns of connect 4
+// Creates the tile pieces for rows and columns of connect 4
 function setGame() {
     board = [];
     currColumns = [5,5,5,5,5,5,5];
@@ -40,34 +40,46 @@ function setGame() {
 
 // Makes game pieces show up on the board and applies gravity to them
 function setPiece() {
+    // stops the game if it's already over
     if (gameOver) {
         return;
     }
 
+    // Get the coordinates of the clicked tile
     let coords = this.id.split("-"); //"0-0" -> ["0", "0"]
     let r = parseInt(coords[0]);
     let c = parseInt(coords[1]);
 
+    // Apply gravity to find available position
     r = currColumns[c];
     if (r < 0) {
         return;
     }
 
+    // Update the board with player piece's
     board[r][c] = currPlayer;
     let tile = document.getElementById(r.toString() + "-" + c.toString());
-    if (currPlayer == playerRed) {
+    // adds class to play at one or two, which between player one or player two
+    if (currPlayer == playerOneRed) {
         tile.classList.add("red-piece");
-        currPlayer = playerYellow;
+        currPlayer = playerTwoYellow;
     }
     else {
         tile.classList.add("yellow-piece");
-        currPlayer = playerRed;
+        currPlayer = playerOneRed;
     }
 
+    // apply gravity
     r -= 1; // updating the row height for the column
     currColumns[c] = r; //updating the array
 
+    // Check if the current move resulted in a win
     checkWinner();
+
+    // Play move sound
+    let moveSound = document.getElementById("moveSound");
+    moveSound.play();
+
 }
 
 // Cheques for possible conditions so the game can end
@@ -75,7 +87,7 @@ function checkWinner() {
     // horizontally
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns - 3; c++) {
-            if (board[r][c] != ' ') {
+            if (board[r][c] != ' ') { // checks if the position is not empty
                 if (board[r][c] == board[r][c+1] && board[r][c+1] == board[r][c+2] && board[r][c+2] == board[r][c+3]) {
                     setWinner(r, c);
                     return;
@@ -124,7 +136,7 @@ function checkWinner() {
 // Display who has won to the user
 function setWinner(r, c) {
     let winner = document.getElementById("winner");
-    if (board[r][c] == playerRed) {
+    if (board[r][c] == playerOneRed) {
         winner.innerText = "Red Wins || Yellow Lost";
     } else {
         winner.innerText = "Yellow Wins || Red Lost";
